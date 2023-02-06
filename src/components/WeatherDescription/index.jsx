@@ -10,20 +10,19 @@ import {
 } from './style';
 import { TbTemperatureCelsius } from 'react-icons/tb';
 
+const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
+const weekDay = new Date().toLocaleDateString('pt-BR', {
+  weekday: 'long',
+});
+const hourDay = new Date().getHours();
+
 const Weather = ({ weatherData }) => {
-  const weekDay = new Date().toLocaleDateString('pt-BR', {
-    weekday: 'long',
-  });
-  const hourDay = new Date().getHours();
-
-  const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
-
   return (
     <>
       <TextContainer>
         <SmallTitle>
           {capitalizeFirstLetter(weekDay)}, {hourDay}h.
-        </SmallTitle>{' '}
+        </SmallTitle>
         <Title>{weatherData.name}</Title>
         <Tag>
           <SmallTitle>{capitalizeFirstLetter(weatherData.weather[0].description)}</SmallTitle>
@@ -37,12 +36,12 @@ const Weather = ({ weatherData }) => {
           </Title>
           <Row>
             <Temperature
-              icon='thermometer-minus.png'
+              icon='thermometer-plus.png'
               label='Mín'
               value={weatherData.main.temp_min}
             />
             <Temperature
-              icon='thermometer-plus.png'
+              icon='thermometer-minus.png'
               label='Máx'
               value={weatherData.main.temp_max}
             />
@@ -94,7 +93,7 @@ const Temperature = ({ label, value, icon }) => {
       <div>
         <SmallTitle>{label}</SmallTitle>
         <p>
-          {Math.round(value)} <span>%</span>
+          {Math.round(value)} <TbTemperatureCelsius />
         </p>
       </div>
     </TemperatureContainer>
