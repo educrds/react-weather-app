@@ -1,14 +1,11 @@
-import {
-  TextContainer,
-  Title,
-  Tag,
-  SmallTitle,
-  WeatherSquare,
-  TemperatureContainer,
-  WeatherContainer,
-  Row,
-} from './style';
+import wind from '../../assets/imgs/weather-icons/wind.png'
+import wet from '../../assets/imgs/weather-icons/wet.png'
+import temperatureMinus from '../../assets/imgs/weather-icons/thermometer-minus.png'
+import temperaturePlus from '../../assets/imgs/weather-icons/thermometer-plus.png'
+
+import { TextContainer,Title,Tag,SmallTitle,WeatherSquare,TemperatureContainer,WeatherContainer,Row } from './style';
 import { TbTemperatureCelsius } from 'react-icons/tb';
+
 
 const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
 const weekDay = new Date().toLocaleDateString('pt-BR', {
@@ -36,12 +33,12 @@ const Weather = ({ weatherData }) => {
           </Title>
           <Row>
             <Temperature
-              icon='thermometer-plus.png'
+              icon={temperatureMinus}
               label='Mín'
               value={weatherData.main.temp_min}
             />
             <Temperature
-              icon='thermometer-minus.png'
+              icon={temperaturePlus}
               label='Máx'
               value={weatherData.main.temp_max}
             />
@@ -61,7 +58,7 @@ const Weather = ({ weatherData }) => {
 const Wind = ({ value }) => {
   return (
     <TemperatureContainer>
-      <img src={`src/assets/imgs/weather-icons/wind.png`} alt='wind icon' />
+      <img src={wind} alt='wind icon' />
       <div>
         <SmallTitle>Vento</SmallTitle>
         <p>
@@ -75,7 +72,7 @@ const Wind = ({ value }) => {
 const Wet = ({ value }) => {
   return (
     <TemperatureContainer>
-      <img src={`src/assets/imgs/weather-icons/wet.png`} alt='wind icon' />
+      <img src={wet} alt='wind icon' />
       <div>
         <SmallTitle>Umidade</SmallTitle>
         <p>
@@ -89,7 +86,7 @@ const Wet = ({ value }) => {
 const Temperature = ({ label, value, icon }) => {
   return (
     <TemperatureContainer>
-      <img src={`src/assets/imgs/weather-icons/${icon}`} alt='temperature icon' />
+      <img src={icon} alt='temperature icon' />
       <div>
         <SmallTitle>{label}</SmallTitle>
         <p>
