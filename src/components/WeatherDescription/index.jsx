@@ -1,12 +1,11 @@
-import wind from '../../assets/imgs/weather-icons/wind.png'
-import wet from '../../assets/imgs/weather-icons/wet.png'
-import temperatureMinus from '../../assets/imgs/weather-icons/thermometer-minus.png'
-import temperaturePlus from '../../assets/imgs/weather-icons/thermometer-plus.png'
-
-import { TextContainer,Title,Tag,SmallTitle,WeatherSquare,TemperatureContainer,WeatherContainer,Row } from './style';
+import wind from '../../assets/imgs/weather-icons/wind.png';
+import wet from '../../assets/imgs/weather-icons/wet.png';
+import temperatureMinus from '../../assets/imgs/weather-icons/thermometer-minus.png';
+import temperaturePlus from '../../assets/imgs/weather-icons/thermometer-plus.png';
+import { TextContainer, Title, Tag, SmallTitle, WeatherSquare, TemperatureContainer, WeatherContainer, Row,
+} from './style';
 import { TbTemperatureCelsius } from 'react-icons/tb';
-
-
+import { useState, useEffect } from 'react';
 const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
 const weekDay = new Date().toLocaleDateString('pt-BR', {
   weekday: 'long',
@@ -14,6 +13,23 @@ const weekDay = new Date().toLocaleDateString('pt-BR', {
 const hourDay = new Date().getHours();
 
 const Weather = ({ weatherData }) => {
+  const [imageWeather, setImageWeather] = useState(null);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await import(
+          `../../assets/imgs/weather-icons/${weatherData.weather[0].icon}.svg`
+        );
+        setImageWeather(response.default);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchImage();
+  }, [weatherData]);
+
   return (
     <>
       <TextContainer>
@@ -24,7 +40,7 @@ const Weather = ({ weatherData }) => {
         <Tag>
           <SmallTitle>{capitalizeFirstLetter(weatherData.weather[0].description)}</SmallTitle>
         </Tag>
-        <img src={`src/assets/imgs/weather-icons/${weatherData.weather[0].icon}.svg`} alt='sun' />
+        <img src={imageWeather} alt='current weather icon' />
       </TextContainer>
       <WeatherContainer>
         <WeatherSquare>
@@ -32,16 +48,8 @@ const Weather = ({ weatherData }) => {
             {Math.round(weatherData.main.temp)} <TbTemperatureCelsius />
           </Title>
           <Row>
-            <Temperature
-              icon={temperatureMinus}
-              label='Mín'
-              value={weatherData.main.temp_min}
-            />
-            <Temperature
-              icon={temperaturePlus}
-              label='Máx'
-              value={weatherData.main.temp_max}
-            />
+            <Temperature icon={temperatureMinus} label='Mín' value={weatherData.main.temp_min} />
+            <Temperature icon={temperaturePlus} label='Máx' value={weatherData.main.temp_max} />
           </Row>
         </WeatherSquare>
         <WeatherSquare>
