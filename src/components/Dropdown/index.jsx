@@ -7,7 +7,7 @@ import {  fetchStatesList } from '../../services/configApi';
 const Dropdowns = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Busca os estados ao montar o componente
