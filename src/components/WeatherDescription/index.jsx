@@ -5,9 +5,9 @@ import { TextContainer, Title, Tag, SmallTitle, WeatherSquare, TemperatureContai
 
 // Importação de componentes e hooks do React e funções auxiliares
 import { TbTemperatureCelsius } from 'react-icons/tb';
+import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { weekDay, getHourFromDate } from '../../utils';
-import { useParams } from 'react-router-dom';
 import { fetchWeatherdata } from '../../services/configApi';
 
 // Componente principal Weather
@@ -17,10 +17,12 @@ const Weather = () => {
   // Recebe o parâmetro 'city' da URL
   const { city } = useParams();
 
-  // Hook useEffect que dispara quando o parâmetro 'city' é atualizado
   useEffect(() => {
-    // Busca os dados do clima da cidade informada pelo usuário e armazena no estado 'weatherData'
-    fetchWeatherdata(city).then(setWeatherData);
+    async function fetchData() {
+      const data = await fetchWeatherdata(city);
+      setWeatherData(data);
+    }
+    fetchData();
   }, [city]);
 
   // Renderiza o componente Weather apenas quando 'weatherData' existir
