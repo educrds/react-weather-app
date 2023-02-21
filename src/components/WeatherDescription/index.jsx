@@ -1,7 +1,16 @@
 import wind from '../../assets/imgs/weather-icons/wind.png';
 import wet from '../../assets/imgs/weather-icons/wet.png';
 import temperaturePlus from '../../assets/imgs/weather-icons/thermometer-plus.png';
-import { TextContainer, Title, Tag, SmallTitle, WeatherSquare, TemperatureContainer, WeatherContainer, Row } from './style';
+import {
+  TextContainer,
+  Title,
+  Tag,
+  SmallTitle,
+  WeatherSquare,
+  TemperatureContainer,
+  WeatherContainer,
+  Row,
+} from './style';
 import { TbTemperatureCelsius } from 'react-icons/tb';
 import { useState, useEffect } from 'react';
 import { weekDay, getHourFromDate } from '../../utils';
@@ -9,32 +18,17 @@ import { useParams } from 'react-router-dom';
 import { fetchWeatherdata } from '../../services/configApi';
 
 const Weather = () => {
-  const [imageWeather, setImageWeather] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+
   const { city } = useParams();
 
-  // Adicionar API para converter nome da cidade em longitude e latitude
   // Adicionar outras informaçoes de cliam em outros square
-  // Adicionar pack de imagens dinamicas
 
   useEffect(() => {
-    fetchWeatherdata(city).then(data => setWeatherData(data));
-
-    console.log(weatherData);
-
-    // fetch dynamic image by current weather
-    // const fetchImage = async () => {
-    //   try {
-    //     const response = await import(
-    //       `../../assets/imgs/weather-icons/${weatherData.weather[0].icon}.svg`
-    //     );
-    //     setImageWeather(response.default);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-
-    // fetchImage();
+    fetchWeatherdata(city).then((data) => {
+      console.log('data', data);
+      setWeatherData(data);
+    });
   }, [city]);
 
   return (
@@ -45,10 +39,10 @@ const Weather = () => {
             {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
           </SmallTitle>
           <Title>{weatherData?.location.name}</Title>
+          <img src={weatherData?.current.condition.icon} alt='current weather icon' />
           <Tag>
             <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
           </Tag>
-          {/* <img src={imageWeather} alt='current weather icon' /> */}
         </TextContainer>
         <WeatherInfos value={weatherData} />
       </>

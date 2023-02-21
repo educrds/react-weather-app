@@ -18,7 +18,7 @@ const TextContainer = styled.div`
   row-gap: 0.2vh;
 
   img {
-    width: 225px;
+    width: 64px;
     filter: drop-shadow(rgba(0, 0, 0, 0.16) 0px 1px 4px);
   }
 `;
@@ -26,7 +26,7 @@ const Title = styled.h1`
   text-align: center;
   font-weight: 800;
   letter-spacing: 0.2px;
-  font-size: 3.5rem;
+  font-size: 3rem;
 
   svg {
     font-size: 2.5rem;
@@ -35,14 +35,14 @@ const Title = styled.h1`
 `;
 
 const SmallTitle = styled.p`
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   color: ${props => props.theme.input.textColor};
 `;
 
 const Tag = styled.div`
   ${SquareStyle};
   ${SetupFlex};
-  padding: 1vh 2vw;
+  padding: 0 1vw;
   border-radius: 2rem;
   width: auto;
 `;
@@ -69,7 +69,7 @@ const TemperatureContainer = styled.div`
     text-align: left;
   }
 
-  > div span{
+  > div span {
     font-size: 1.15rem;
     /* color: ${props => props.theme.input.textColor}; */
     font-weight: 400;
