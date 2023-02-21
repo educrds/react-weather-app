@@ -1,48 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Button, Select, SpinnerContainer, Loading } from './style';
 import { BiSearch } from 'react-icons/bi';
-import fetchData from '../../services/api';
-import { geo, weather } from '../../services/configApi';
-import Weather from '../WeatherDescription';
-
-const apiKey = import.meta.env.VITE_API_KEY;
+import { Link } from 'react-router-dom';
+import { fetchGeoData } from '../../services/configApi';
 
 const Dropdowns = () => {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [weatherData, setWeatherData] = useState(null);
   const [selectedCity, setSelectedCity] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetchData('/', geo).then(data => setStates(data));
+    fetchGeoData('/').then(data => setStates(data));
   }, []);
 
   const handleStateChange = e => {
     const stateISO = e.target.options[e.target.selectedIndex].id;
     setCities([]);
     setIsLoading(true);
-    fetchData(`/${stateISO}/cities`, geo).then(data => {
+    fetchGeoData(`/${stateISO}/cities`).then(data => {
       setCities(data);
       setIsLoading(false);
     });
   };
 
   const handleCityChange = e => setSelectedCity(e.target.value);
-
-  const handleSubmit = () =>
-    fetchData(`weather?q=${selectedCity}&appid=${apiKey}&units=metric&lang=pt_br`, weather).then(
-      data => setWeatherData(data)
-    );
-
   return (
     <>
       <Container>
         <Dropdown onChange={handleStateChange} label='Estado' data={states} />
-        {isLoading ? <LoadingSpinner /> : <Dropdown onChange={handleCityChange} label='Cidade' data={cities} />}
-        <SearchButton onClick={handleSubmit} />
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <Dropdown onChange={handleCityChange} label='Cidade' data={cities} />
+        )}
+        <Link to={`/react-weather-app/${selectedCity}`}>
+          <SearchButton />
+        </Link>
       </Container>
-      {weatherData && <Weather weatherData={weatherData} />}
     </>
   );
 };

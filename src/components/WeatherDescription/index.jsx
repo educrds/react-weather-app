@@ -2,64 +2,88 @@ import wind from '../../assets/imgs/weather-icons/wind.png';
 import wet from '../../assets/imgs/weather-icons/wet.png';
 import temperatureMinus from '../../assets/imgs/weather-icons/thermometer-minus.png';
 import temperaturePlus from '../../assets/imgs/weather-icons/thermometer-plus.png';
-import { TextContainer, Title, Tag, SmallTitle, WeatherSquare, TemperatureContainer, WeatherContainer, Row,
+import {
+  TextContainer,
+  Title,
+  Tag,
+  SmallTitle,
+  WeatherSquare,
+  TemperatureContainer,
+  WeatherContainer,
+  Row,
 } from './style';
 import { TbTemperatureCelsius } from 'react-icons/tb';
 import { useState, useEffect } from 'react';
-const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
-const weekDay = new Date().toLocaleDateString('pt-BR', {
-  weekday: 'long',
-});
-const hourDay = new Date().getHours();
+import { weekDay, getHourFromDate } from '../../utils';
+import { useParams } from 'react-router-dom';
+import { fetchWeatherdata } from '../../services/configApi';
 
-const Weather = ({ weatherData }) => {
+const Weather = () => {
   const [imageWeather, setImageWeather] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+  const { city } = useParams();
+
+  console.log(city);
 
   useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await import(
-          `../../assets/imgs/weather-icons/${weatherData.weather[0].icon}.svg`
-        );
-        setImageWeather(response.default);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    fetchWeatherdata(city).then(data => setWeatherData(data));
 
-    fetchImage();
-  }, [weatherData]);
+    console.log(weatherData);
+
+    // fetch dynamic image by current weather
+    // const fetchImage = async () => {
+    //   try {
+    //     const response = await import(
+    //       `../../assets/imgs/weather-icons/${weatherData.weather[0].icon}.svg`
+    //     );
+    //     setImageWeather(response.default);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
+
+    // fetchImage();
+  }, [city]);
 
   return (
-    <>
-      <TextContainer>
-        <SmallTitle>
-          {capitalizeFirstLetter(weekDay)}, {hourDay}h.
-        </SmallTitle>
-        <Title>{weatherData.name}</Title>
-        <Tag>
-          <SmallTitle>{capitalizeFirstLetter(weatherData.weather[0].description)}</SmallTitle>
-        </Tag>
-        <img src={imageWeather} alt='current weather icon' />
-      </TextContainer>
-      <WeatherContainer>
-        <WeatherSquare>
-          <Title>
-            {Math.round(weatherData.main.temp)} <TbTemperatureCelsius />
-          </Title>
-          <Row>
-            <Temperature icon={temperatureMinus} label='Mín' value={weatherData.main.temp_min} />
-            <Temperature icon={temperaturePlus} label='Máx' value={weatherData.main.temp_max} />
-          </Row>
-        </WeatherSquare>
-        <WeatherSquare>
-          <Row className='column'>
-            <Wind value={Math.imul(weatherData.wind.speed, 3.6)} />
-            <Wet value={weatherData.main.humidity} />
-          </Row>
-        </WeatherSquare>
-      </WeatherContainer>
-    </>
+    weatherData && (
+      <>
+        <TextContainer>
+          <SmallTitle>
+            {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
+          </SmallTitle>
+          <Title>{weatherData?.location.name}</Title>
+          <Tag>
+            <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
+          </Tag>
+          {/* <img src={imageWeather} alt='current weather icon' /> */}
+        </TextContainer>
+        <WeatherInfos value={weatherData} />
+      </>
+    )
+  );
+};
+
+const WeatherInfos = ({ value }) => {
+  return (
+    <WeatherContainer>
+      <WeatherSquare>
+        <Title>
+          {Math.round(value?.current.temp_c)} <TbTemperatureCelsius />
+        </Title>
+        <Temperature
+          icon={temperaturePlus}
+          label='Sensação térmica'
+          value={value?.current.feelslike_c}
+        />
+      </WeatherSquare>
+      <WeatherSquare>
+        <Row className='column'>
+          <Wind value={value} />
+          <Wet value={value} />
+        </Row>
+      </WeatherSquare>
+    </WeatherContainer>
   );
 };
 
@@ -70,7 +94,7 @@ const Wind = ({ value }) => {
       <div>
         <SmallTitle>Vento</SmallTitle>
         <p>
-          {value} <span>km/h</span>
+          {value?.current.wind_kph} <span>km/h</span>
         </p>
       </div>
     </TemperatureContainer>
@@ -84,7 +108,7 @@ const Wet = ({ value }) => {
       <div>
         <SmallTitle>Umidade</SmallTitle>
         <p>
-          {value} <span>%</span>
+          {value?.current.humidity} <span>%</span>
         </p>
       </div>
     </TemperatureContainer>
