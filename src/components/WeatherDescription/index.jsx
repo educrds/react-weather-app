@@ -1,17 +1,7 @@
 import wind from '../../assets/imgs/weather-icons/wind.png';
 import wet from '../../assets/imgs/weather-icons/wet.png';
-import temperatureMinus from '../../assets/imgs/weather-icons/thermometer-minus.png';
 import temperaturePlus from '../../assets/imgs/weather-icons/thermometer-plus.png';
-import {
-  TextContainer,
-  Title,
-  Tag,
-  SmallTitle,
-  WeatherSquare,
-  TemperatureContainer,
-  WeatherContainer,
-  Row,
-} from './style';
+import { TextContainer, Title, Tag, SmallTitle, WeatherSquare, TemperatureContainer, WeatherContainer, Row } from './style';
 import { TbTemperatureCelsius } from 'react-icons/tb';
 import { useState, useEffect } from 'react';
 import { weekDay, getHourFromDate } from '../../utils';
@@ -23,7 +13,9 @@ const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
   const { city } = useParams();
 
-  console.log(city);
+  // Adicionar API para converter nome da cidade em longitude e latitude
+  // Adicionar outras informaçoes de cliam em outros square
+  // Adicionar pack de imagens dinamicas
 
   useEffect(() => {
     fetchWeatherdata(city).then(data => setWeatherData(data));
