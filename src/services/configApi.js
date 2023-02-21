@@ -11,7 +11,7 @@ const geo = axios.create({
   },
 });
 
-const fetchGeoData = async endpoint => {
+const fetchStatesList = async endpoint => {
   try {
     const { data } = await geo(endpoint);
     return data;
@@ -43,4 +43,4 @@ const fetchGeoCodingAddress = async city => {
   }
 };
 
-export { fetchWeatherdata, fetchGeoData };
+export { fetchWeatherdata, fetchStatesList };

@@ -26,7 +26,7 @@ const Title = styled.h1`
   text-align: center;
   font-weight: 800;
   letter-spacing: 0.2px;
-  font-size: 3rem;
+  font-size: 3.5rem;
 
   svg {
     font-size: 2.5rem;
@@ -35,7 +35,7 @@ const Title = styled.h1`
 `;
 
 const SmallTitle = styled.p`
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: ${props => props.theme.input.textColor};
 `;
 
@@ -55,6 +55,9 @@ const WeatherSquare = styled(Container)`
   width: 330px;
   height: 180px;
   margin: 1vh 1vw;
+  & p:nth-child(2) {
+    font-size: 1.5rem;
+  }
 `;
 
 const TemperatureContainer = styled.div`
