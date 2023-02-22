@@ -47,16 +47,33 @@ const Tag = styled.div`
   width: auto;
 `;
 
-const WeatherSquare = styled(Container)`
+const Square = styled(Container)`
   ${SquareStyle};
   color: ${props => props.theme.textColor};
   border-radius: 1.3rem;
   flex-direction: column;
   width: 330px;
-  height: 180px;
+  height: max-content;
+  padding: 3vh 0;
   margin: 1vh 1vw;
   & p:nth-child(2) {
     font-size: 1.5rem;
+  }
+`;
+
+const ErrorSquare = styled(Square)`
+  background: #fbebeb;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+
+  > p {
+    color: #d33535;
+    align-items: center;
+    display: flex;
+    gap: 3px;
   }
 `;
 
@@ -74,7 +91,6 @@ const TemperatureContainer = styled.div`
 
   > div span {
     font-size: 1.15rem;
-    /* color: ${props => props.theme.input.textColor}; */
     font-weight: 400;
   }
 
@@ -102,8 +118,9 @@ export {
   Title,
   SmallTitle,
   Tag,
-  WeatherSquare,
+  Square,
   TemperatureContainer,
   WeatherContainer,
   Row,
+  ErrorSquare,
 };

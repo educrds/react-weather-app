@@ -12,10 +12,10 @@ const Dropdowns = () => {
 
   // Busca os estados ao montar o componente
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       const data = await fetchStatesList('/');
       setStates(data);
-    }
+    };
     fetchData();
   }, []);
 
@@ -28,7 +28,6 @@ const Dropdowns = () => {
     setCities(data);
     setIsLoading(false);
   };
-
 
   // Quando a cidade selecionada é alterada, atualiza o estado
   const handleCityChange = e => setSelectedCity(e.target.value);

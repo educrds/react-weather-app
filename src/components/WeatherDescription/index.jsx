@@ -1,10 +1,11 @@
 // Importação dos ícones e componentes do estilo
 import windIcon from '../../assets/imgs/weather-icons/wind.png';
 import wetIcon from '../../assets/imgs/weather-icons/wet.png';
-import { TextContainer, Title, Tag, SmallTitle, WeatherSquare, TemperatureContainer, WeatherContainer, Row } from './style';
+import { TextContainer, Title, Tag, SmallTitle, Square, TemperatureContainer, WeatherContainer, Row, ErrorSquare } from './style';
 
 // Importação de componentes e hooks do React e funções auxiliares
 import { TbTemperatureCelsius } from 'react-icons/tb';
+import { MdError } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { weekDay, getHourFromDate } from '../../utils';
@@ -18,48 +19,57 @@ const Weather = () => {
   const { city } = useParams();
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       const data = await fetchWeatherdata(city);
       setWeatherData(data);
-    }
+    };
     fetchData();
   }, [city]);
 
   // Renderiza o componente Weather apenas quando 'weatherData' existir
-  return (
-    weatherData && (
-      <>
-        <TextContainer>
-          <SmallTitle>
-            {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
-          </SmallTitle>
-          <Title>{weatherData?.location.name}</Title>
-          <img src={weatherData?.current.condition.icon} alt='current weather icon' />
-          <Tag>
-            <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
-          </Tag>
-        </TextContainer>
-        <WeatherInfos value={weatherData} />
-      </>
-    )
+  return weatherData ? (
+    <>
+      <TextContainer>
+        <SmallTitle>
+          {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
+        </SmallTitle>
+        <Title>{city}</Title>
+        <img src={weatherData?.current.condition.icon} alt='current weather icon' />
+        <Tag>
+          <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
+        </Tag>
+      </TextContainer>
+      <WeatherInfos value={weatherData} />
+    </>
+  ) : (
+    <ErrorMessage />
   );
 };
+
+const ErrorMessage = () => (
+  <ErrorSquare>
+    <SmallTitle>
+      <MdError />
+      Cidade não encontrada!
+    </SmallTitle>
+  </ErrorSquare>
+);
 
 // Componente WeatherInfos que recebe os dados do clima como propriedade
 const WeatherInfos = ({ value }) => (
   <WeatherContainer>
-    <WeatherSquare>
+    <Square>
       <Title>
         {Math.round(value?.current.temp_c)} <TbTemperatureCelsius />
       </Title>
       <Temperature label='Sensação térmica' value={value?.current.feelslike_c} />
-    </WeatherSquare>
-    <WeatherSquare>
+    </Square>
+    <Square>
       <Row className='column'>
         <Wind value={value} />
         <Wet value={value} />
       </Row>
-    </WeatherSquare>
+    </Square>
   </WeatherContainer>
 );
 
