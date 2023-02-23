@@ -36,10 +36,9 @@ const fetchWeatherdata = async city => {
 };
 
 const fetchGeoCodingAddress = async city => {
+  const url__API = `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+BR&key=${mapsAPIKey}`;
   try {
-    const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${city},+BR&key=${mapsAPIKey}`
-    );
+    const response = await axios.get(url__API);
     return response.data.results[0].geometry.location;
   } catch (error) {
     console.log(error);

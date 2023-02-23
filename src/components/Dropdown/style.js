@@ -15,10 +15,4 @@ const Select = styled.select`
   padding: 0 0.5vw;
 `;
 
-const Button = styled.button`
-  width: 40px;
-  ${SquareStyle};
-  cursor: pointer;
-`;
-
-export { Select, Button, SquareStyle };
+export { Select, SquareStyle };
