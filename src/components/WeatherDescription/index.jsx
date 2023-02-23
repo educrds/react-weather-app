@@ -1,17 +1,9 @@
 // Importação dos ícones e componentes do estilo
 import windIcon from '../../assets/imgs/weather-icons/wind.png';
 import wetIcon from '../../assets/imgs/weather-icons/wet.png';
-import {
-  TextContainer,
-  Title,
-  Tag,
-  SmallTitle,
-  Square,
-  TemperatureContainer,
-  WeatherContainer,
-  Row,
-  ErrorSquare,
-} from './style';
+import thermometerPlus from '../../assets/imgs/weather-icons/thermometer-plus.png';
+import thermometerMinus from '../../assets/imgs/weather-icons/thermometer-minus.png';
+import { TextContainer, Title, Tag, SmallTitle, Square, TemperatureContainer, WeatherContainer, Row, ErrorSquare } from './style';
 
 // Importação de componentes e hooks do React e funções auxiliares
 import { TbTemperatureCelsius } from 'react-icons/tb';
@@ -65,10 +57,10 @@ const Weather = () => {
             {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
           </SmallTitle>
           <Title>{city}</Title>
-          <img src={weatherData?.current.condition.icon} alt='current weather icon' />
           <Tag>
             <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
           </Tag>
+          <img src={weatherData?.current.condition.icon} alt='current weather icon' />
         </TextContainer>
         <WeatherInfos value={weatherData} />
       </>
@@ -92,7 +84,13 @@ const WeatherInfos = ({ value }) => (
       <Title>
         {Math.round(value?.current.temp_c)} <TbTemperatureCelsius />
       </Title>
-      <Temperature label='Sensação térmica' value={value?.current.feelslike_c} />
+      <Temperature
+        label='Sensação térmica'
+        value={value?.current.feelslike_c}
+        icon={
+          value?.current.feelslike_c > value?.current.temp_c ? thermometerPlus : thermometerMinus
+        }
+      />
     </Square>
     <Square>
       <Row className='column'>
@@ -130,13 +128,16 @@ const Wet = ({ value }) => (
 );
 
 // Componente Temperature que recebe uma label e um valor de temperatura como propriedades
-const Temperature = ({ label, value }) => (
-  <div>
-    <SmallTitle>{label}</SmallTitle>
-    <SmallTitle>
-      {Math.round(value)} <TbTemperatureCelsius />
-    </SmallTitle>
-  </div>
+const Temperature = ({ label, value, icon }) => (
+  <TemperatureContainer>
+    <img src={icon} alt='thermometer icon' />
+    <div>
+      <SmallTitle>{label}</SmallTitle>
+      <p>
+        {Math.round(value)} <TbTemperatureCelsius />
+      </p>
+    </div>
+  </TemperatureContainer>
 );
 
 export default Weather;
