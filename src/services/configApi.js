@@ -11,20 +11,16 @@ const geo = axios.create({
   },
 });
 
-const fetchStatesList = async endpoint => {
+const fetchStatesList = async (endpoint, setData, setIsLoading) => {
+  setIsLoading(true); // Indica que os dados estão sendo carregados
   try {
     const { data } = await geo(endpoint);
-    return data;
+    setData(data);
   } catch (error) {
     console.log(error);
+  } finally {
+    setIsLoading(false); // Indica que os dados foram carregados
   }
-};
-
-const fetchData = async (url, setData, setIsLoading) => {
-  setIsLoading(true); // Indica que os dados estão sendo carregados
-  const data = await fetchStatesList(url);
-  setData(data);
-  setIsLoading(false); // Indica que os dados foram carregados
 };
 
 const fetchWeatherdata = async city => {
@@ -50,4 +46,4 @@ const fetchGeoCodingAddress = async city => {
   }
 };
 
-export { fetchWeatherdata, fetchStatesList, fetchData };
+export { fetchWeatherdata, fetchStatesList };

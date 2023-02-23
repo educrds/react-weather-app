@@ -3,7 +3,7 @@ import Container from './style';
 import { Dropdown, SearchButton } from '../Dropdown';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner';
-import fetchData from '../../services/configApi';
+import { fetchStatesList } from '../../services/configApi';
 
 const Dropdowns = () => {
   const [states, setStates] = useState([]);
@@ -20,7 +20,7 @@ const Dropdowns = () => {
 
   // Busca os estados ao montar o componente
   useEffect(() => {
-    const fetchStatesData = async () => fetchData('/', setStates, setIsLoadingStates);
+    const fetchStatesData = async () => fetchStatesList('/', setStates, setIsLoadingStates);
     fetchStatesData();
   }, []);
 
@@ -30,7 +30,7 @@ const Dropdowns = () => {
       const stateISO = e.target.options[e.target.selectedIndex].id;
       setSelectedState(e.target.value);
       setCities([]);
-      fetchData(`/${stateISO}/cities`, setCities, setIsLoadingCities);
+      fetchStatesList(`/${stateISO}/cities`, setCities, setIsLoadingCities);
     },
     [setSelectedState, setCities, setIsLoadingCities]
   );
