@@ -20,6 +20,13 @@ const fetchStatesList = async endpoint => {
   }
 };
 
+const fetchData = async (url, setData, setIsLoading) => {
+  setIsLoading(true); // Indica que os dados estão sendo carregados
+  const data = await fetchStatesList(url);
+  setData(data);
+  setIsLoading(false); // Indica que os dados foram carregados
+};
+
 const fetchWeatherdata = async city => {
   try {
     const { lat, lng } = await fetchGeoCodingAddress(city);
@@ -43,4 +50,4 @@ const fetchGeoCodingAddress = async city => {
   }
 };
 
-export { fetchWeatherdata, fetchStatesList };
+export { fetchWeatherdata, fetchStatesList, fetchData };

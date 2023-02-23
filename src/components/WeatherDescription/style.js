@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { SetupFlex } from '../../styles/globalStyle';
-import { Container, SquareStyle } from '../Dropdown/style';
+
+import { SquareStyle } from '../Dropdown/style';
+import Container from '../Dropdowns/style';
 
 const WeatherContainer = styled.div`
   ${SetupFlex};

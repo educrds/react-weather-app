@@ -1,9 +1,10 @@
-import Dropdowns from './components/Dropdown';
 import { Navbar, useTheme } from './components/Navbar';
 import { GlobalStyle } from './styles/globalStyle';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Weather from './components/WeatherDescription';
+import Dropdowns from './components/Dropdowns';
+
 
 function App() {
   const [theme, toggleTheme] = useTheme();

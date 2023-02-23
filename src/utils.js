@@ -5,10 +5,10 @@ const weekDay = capitalizeFirstLetter(
     weekday: 'long',
   })
 );
-function getHourFromDate(datetime) {
+const getHourFromDate = datetime => {
   const time = datetime?.split(' ')[1]; // '22:11'
   const hour = time?.split(':')[0]; // '22'
   return hour;
-}
+};
 
 export { weekDay, getHourFromDate };

@@ -1,7 +1,17 @@
 // Importação dos ícones e componentes do estilo
 import windIcon from '../../assets/imgs/weather-icons/wind.png';
 import wetIcon from '../../assets/imgs/weather-icons/wet.png';
-import { TextContainer, Title, Tag, SmallTitle, Square, TemperatureContainer, WeatherContainer, Row, ErrorSquare } from './style';
+import {
+  TextContainer,
+  Title,
+  Tag,
+  SmallTitle,
+  Square,
+  TemperatureContainer,
+  WeatherContainer,
+  Row,
+  ErrorSquare,
+} from './style';
 
 // Importação de componentes e hooks do React e funções auxiliares
 import { TbTemperatureCelsius } from 'react-icons/tb';
@@ -15,34 +25,54 @@ import { fetchWeatherdata } from '../../services/configApi';
 const Weather = () => {
   // Estado para armazenar os dados do clima
   const [weatherData, setWeatherData] = useState(null);
+  // Estado para armazenar se ocorreu um erro ao buscar os dados do clima
+  const [error, setError] = useState(false);
   // Recebe o parâmetro 'city' da URL
   const { city } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchWeatherdata(city);
-      setWeatherData(data);
+      try {
+        const data = await fetchWeatherdata(city);
+        // Verifica se a API retornou dados para a cidade pesquisada
+        if (data && data.location) {
+          setWeatherData(data);
+          setError(false);
+        } else {
+          setWeatherData(null);
+          setError(true);
+        }
+      } catch (error) {
+        console.log(error);
+        setWeatherData(null);
+        setError(true);
+      }
     };
     fetchData();
   }, [city]);
 
+  // Renderiza o componente ErrorMessage se ocorreu um erro ao buscar os dados do clima
+  if (error) {
+    return <ErrorMessage />;
+  }
+
   // Renderiza o componente Weather apenas quando 'weatherData' existir
-  return weatherData ? (
-    <>
-      <TextContainer>
-        <SmallTitle>
-          {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
-        </SmallTitle>
-        <Title>{city}</Title>
-        <img src={weatherData?.current.condition.icon} alt='current weather icon' />
-        <Tag>
-          <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
-        </Tag>
-      </TextContainer>
-      <WeatherInfos value={weatherData} />
-    </>
-  ) : (
-    <ErrorMessage />
+  return (
+    weatherData && (
+      <>
+        <TextContainer>
+          <SmallTitle>
+            {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
+          </SmallTitle>
+          <Title>{city}</Title>
+          <img src={weatherData?.current.condition.icon} alt='current weather icon' />
+          <Tag>
+            <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
+          </Tag>
+        </TextContainer>
+        <WeatherInfos value={weatherData} />
+      </>
+    )
   );
 };
 

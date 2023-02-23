@@ -1,51 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Button, Select, SpinnerContainer, Loading } from './style';
 import { BiSearch } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
-import {  fetchStatesList } from '../../services/configApi';
-
-const Dropdowns = () => {
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Busca os estados ao montar o componente
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchStatesList('/');
-      setStates(data);
-    };
-    fetchData();
-  }, []);
-
-  // Quando o estado selecionado é alterado, busca as cidades correspondentes
-  const handleStateChange = async (e) => {
-    const stateISO = e.target.options[e.target.selectedIndex].id;
-    setCities([]);
-    setIsLoading(true);
-    const data = await fetchStatesList(`/${stateISO}/cities`);
-    setCities(data);
-    setIsLoading(false);
-  };
-
-  // Quando a cidade selecionada é alterada, atualiza o estado
-  const handleCityChange = e => setSelectedCity(e.target.value);
-
-  return (
-      <Container>
-        <Dropdown onChange={handleStateChange} label='Estado' data={states} />
-        {isLoading ? <LoadingSpinner /> : <Dropdown onChange={handleCityChange} label='Cidade' data={cities} /> }
-        <Link to={`/react-weather-app/${selectedCity}`}>
-          <SearchButton />
-        </Link>
-      </Container>
-  );
-};
+import { Button, Select } from './style';
+import React from 'react';
 
 // Componente que representa um Dropdown
-const Dropdown = ({ label, data, onChange }) => (
-  <Select onChange={onChange}>
+const Dropdown = React.memo(({ label, data, value, onChange, disabled }) => (
+  <Select value={value} onChange={onChange} disabled={disabled}>
     <option>{label}</option>
     {data.map(data => (
       <option id={data.iso2} key={data.id} value={data.name}>
@@ -53,20 +12,13 @@ const Dropdown = ({ label, data, onChange }) => (
       </option>
     ))}
   </Select>
-);
+));
 
 // Componente que representa o botão de busca
-const SearchButton = ({ onClick }) => (
+const SearchButton = React.memo(({ onClick }) => (
   <Button onClick={onClick}>
     <BiSearch />
   </Button>
-);
+));
 
-// Componente que representa o spinner de loading
-const LoadingSpinner = () => (
-  <SpinnerContainer>
-    <Loading></Loading>
-  </SpinnerContainer>
-);
-
-export default Dropdowns;
+export { Dropdown, SearchButton };
