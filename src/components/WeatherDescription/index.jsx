@@ -11,7 +11,7 @@ import { MdError } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { weekDay, getHourFromDate } from '../../utils';
-import { fetchWeatherdata } from '../../services/configApi';
+import fetchWeatherdata from '../../services/weatherApi';
 
 // Componente principal Weather
 const Weather = () => {

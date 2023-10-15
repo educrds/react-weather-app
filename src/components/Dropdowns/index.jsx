@@ -4,7 +4,7 @@ import Dropdown from '../Dropdown';
 import SearchButton from '../SearchButton';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner';
-import { fetchStatesList } from '../../services/configApi';
+import fetchStatesList from '../../services/countriesApi';
 
 const Dropdowns = () => {
   const [states, setStates] = useState([]);
