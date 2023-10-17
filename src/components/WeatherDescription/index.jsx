@@ -23,25 +23,26 @@ const Weather = () => {
   const { city } = useParams();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchWeatherdata(city);
-        // Verifica se a API retornou dados para a cidade pesquisada
-        if (data && data.location) {
-          setWeatherData(data);
-          setError(false);
-        } else {
-          setWeatherData(null);
-          setError(true);
-        }
-      } catch (error) {
-        console.log(error);
+    fetchData();
+  }, [city]);
+  
+  const fetchData = async () => {
+    try {
+      const data = await fetchWeatherdata(city);
+      // Verifica se a API retornou dados para a cidade pesquisada
+      if (data) {
+        setWeatherData(data);
+        setError(false);
+      } else {
         setWeatherData(null);
         setError(true);
       }
-    };
-    fetchData();
-  }, [city]);
+    } catch (error) {
+      console.log(error);
+      setWeatherData(null);
+      setError(true);
+    }
+  };
 
   // Renderiza o componente ErrorMessage se ocorreu um erro ao buscar os dados do clima
   if (error) {
@@ -54,13 +55,13 @@ const Weather = () => {
       <>
         <TextContainer>
           <SmallTitle>
-            {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h.
+            {/* {weekDay}, {getHourFromDate(weatherData?.location.localtime)}h. */}
           </SmallTitle>
           <Title>{city}</Title>
           <Tag>
-            <SmallTitle>{weatherData?.current.condition.text}</SmallTitle>
+            <SmallTitle>{weatherData?.weather[0].description}</SmallTitle>
           </Tag>
-          <img src={weatherData?.current.condition.icon} alt='current weather icon' />
+          <img src={weatherData?.weather[0].icon} alt='current weather icon' />
         </TextContainer>
         <WeatherInfos value={weatherData} />
       </>
@@ -82,13 +83,13 @@ const WeatherInfos = ({ value }) => (
   <WeatherContainer>
     <Square>
       <Title>
-        {Math.round(value?.current.temp_c)} <TbTemperatureCelsius />
+        {Math.round(value?.main.temp)} <TbTemperatureCelsius />
       </Title>
       <Temperature
         label='Sensação térmica'
-        value={value?.current.feelslike_c}
+        value={value?.main.feels_like}
         icon={
-          value?.current.feelslike_c > value?.current.temp_c ? thermometerPlus : thermometerMinus
+          value?.main.feels_like > value?.main.temp ? thermometerPlus : thermometerMinus
         }
       />
     </Square>
@@ -108,7 +109,7 @@ const Wind = ({ value }) => (
     <div>
       <SmallTitle>Vento</SmallTitle>
       <p>
-        {value?.current.wind_kph} <span>km/h</span>
+        {value?.wind.speed} <span>km/h</span>
       </p>
     </div>
   </TemperatureContainer>
@@ -121,7 +122,7 @@ const Wet = ({ value }) => (
     <div>
       <SmallTitle>Umidade</SmallTitle>
       <p>
-        {value?.current.humidity} <span>%</span>
+        {value?.main.humidity} <span>%</span>
       </p>
     </div>
   </TemperatureContainer>
